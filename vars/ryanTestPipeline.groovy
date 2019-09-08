@@ -5,7 +5,7 @@
     RES_GROUP - The resource group for the web app (obtained from Azure)
     WEB_APP - The name of the web app in Azure.
 */
-def pipeline(String successEmailAddress, String REPOSITORY_BRANCH, String AZURE_CRED_ID, String RES_GROUP, String WEB_APP, String JOB_NAME, String BUILD_NUMBER, String BUILD_URL ) {
+def call(String successEmailAddress, String REPOSITORY_BRANCH, String AZURE_CRED_ID, String RES_GROUP, String WEB_APP, String JOB_NAME, String BUILD_NUMBER, String BUILD_URL ) {
     pipeline {
         agent any
         stages {
