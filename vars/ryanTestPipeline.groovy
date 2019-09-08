@@ -1,5 +1,5 @@
 // vars/evenOrOdd.groovy
-def call(String successEmailAddress) {
+def pipeline(String successEmailAddress) {
     pipeline {
         agent any
         stages {
