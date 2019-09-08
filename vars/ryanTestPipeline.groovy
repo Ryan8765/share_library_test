@@ -1,5 +1,11 @@
-// vars/evenOrOdd.groovy
-def pipeline(String successEmailAddress) {
+/**
+    successEmailAddress - email address to send to
+    REPOSITORY_BRANCH - The branch of the current deployment (sent via webhook to Jenkins from beanstalk)
+    AZURE_CRED_ID - Credential ID for Azure (stored in Jenkins securely)
+    RES_GROUP - The resource group for the web app (obtained from Azure)
+    WEB_APP - The name of the web app in Azure.
+*/
+def pipeline(String successEmailAddress, String REPOSITORY_BRANCH, String AZURE_CRED_ID, String RES_GROUP, String WEB_APP, String JOB_NAME, String BUILD_NUMBER, String BUILD_URL ) {
     pipeline {
         agent any
         stages {
@@ -27,9 +33,9 @@ def pipeline(String successEmailAddress) {
                         input message: 'Approve Deployment?'
                     }
 
-                    azureWebAppPublish azureCredentialsId: env.AZURE_CRED_ID,
-                        resourceGroup: env.RES_GROUP,
-                        appName: env.WEB_APP,
+                    azureWebAppPublish azureCredentialsId: AZURE_CRED_ID,
+                        resourceGroup: RES_GROUP,
+                        appName: WEB_APP,
                         filePath: "**/*.*",
                         sourceDirectory: "build"
                 }
@@ -43,9 +49,9 @@ def pipeline(String successEmailAddress) {
                 }
                 steps {
 
-                    azureWebAppPublish azureCredentialsId: env.AZURE_CRED_ID,
-                        resourceGroup: env.RES_GROUP,
-                        appName: env.WEB_APP,
+                    azureWebAppPublish azureCredentialsId: AZURE_CRED_ID,
+                        resourceGroup: RES_GROUP,
+                        appName: WEB_APP,
                         filePath: "**/*.*",
                         sourceDirectory: "build"
                 }
@@ -61,7 +67,7 @@ def pipeline(String successEmailAddress) {
 
             //On Success - always send an email to the team involved.
             success {
-                mail bcc: '', body: "<b>Example</b><br>Project: ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}", cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${env.JOB_NAME}", to: successEmailAddress;
+                mail bcc: '', body: "<b>Example</b><br>Project: ${JOB_NAME} <br>Build Number: ${BUILD_NUMBER} <br> URL de build: ${BUILD_URL}", cc: '', charset: 'UTF-8', from: '', mimeType: 'text/html', replyTo: '', subject: "ERROR CI: Project name -> ${JOB_NAME}", to: successEmailAddress;
             }
 
         }
